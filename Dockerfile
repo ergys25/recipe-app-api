@@ -25,8 +25,7 @@ RUN python -m venv /py && \
       --disabled-password \
       --no-create-home \
       django-user \
-
-
+      && chown -R django-user /app  # Change ownership of the /app directory
 
 ENV PATH="/py/bin:$PATH"
 
