@@ -14,13 +14,13 @@ class AdminSiteTests(TestCase):
         """Set up."""
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-            email='user@example.com',
+            email='user2@example.com',
             password='test123',
 
         )
         self.client.force_login(self.admin_user)
         self.user = get_user_model().objects.create_user(
-            email='user@example.com',
+            email='user1@example.com',
             password='test123',
             name='Test user full name',
         )
