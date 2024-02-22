@@ -1,103 +1,122 @@
 # API Documentation
 
-## Introduction
-This document provides the API documentation for the API endpoints.
+## Overview
+
+This document describes the endpoints and schemas of the API.
 
 ## Authentication
-This API uses various authentication methods, including basic authentication, cookie-based authentication, and token-based authentication.
 
-### Basic Authentication
-For endpoints requiring basic authentication, use HTTP basic authentication with the username and password provided.
+The API uses various authentication methods including:
 
-### Cookie-based Authentication
-For endpoints requiring cookie-based authentication, include the session token in the cookie named "Session".
-
-### Token-based Authentication
-For endpoints requiring token-based authentication, include the authentication token in the Authorization header with the prefix "Token".
+- Basic Authentication
+- Token Authentication
+- Cookie Authentication
 
 ## Endpoints
 
-### Retrieve Schema
-- **Description**: Retrieves the OpenAPI 3 schema for this API in the selected format.
-- **Method**: GET
-- **URL**: `/api/schema/`
-- **Parameters**:
-  - `format` (query parameter, required): Format of the schema. Allowed values: json, yaml.
-  - `lang` (query parameter, optional): Language code for the schema.
-- **Tags**: schema
-- **Security**:
-  - cookieAuth
-  - basicAuth
+### Health Check [/api/health-check/]
 
-### Create User
-- **Description**: Creates a new user in the system.
-- **Method**: POST
-- **URL**: `/api/user/create/`
-- **Tags**: user
-- **Request Body**:
-  - Content-Type: application/json, application/x-www-form-urlencoded, multipart/form-data
-  - Schema: User
-- **Security**:
-  - cookieAuth
-  - basicAuth
+#### Retrieve Health Check [GET]
 
-### Retrieve Authenticated User
-- **Description**: Retrieves the authenticated user's information.
-- **Method**: GET
-- **URL**: `/api/user/me/`
-- **Tags**: user
-- **Security**: tokenAuth
+Returns successful response.
 
-### Update Authenticated User
-- **Description**: Updates the authenticated user's information.
-- **Method**: PUT
-- **URL**: `/api/user/me/`
-- **Tags**: user
-- **Request Body**:
-  - Content-Type: application/json, application/x-www-form-urlencoded, multipart/form-data
-  - Schema: User
-- **Security**: tokenAuth
++ Response 200
 
-### Partially Update Authenticated User
-- **Description**: Partially updates the authenticated user's information.
-- **Method**: PATCH
-- **URL**: `/api/user/me/`
-- **Tags**: user
-- **Request Body**:
-  - Content-Type: application/json, application/x-www-form-urlencoded, multipart/form-data
-  - Schema: PatchedUser
-- **Security**: tokenAuth
+    [No response body]
 
-### Create User Auth Token
-- **Description**: Creates a new authentication token for the user.
-- **Method**: POST
-- **URL**: `/api/user/token/`
-- **Tags**: user
-- **Request Body**:
-  - Content-Type: application/json, application/x-www-form-urlencoded, multipart/form-data
-  - Schema: AuthToken
-- **Security**:
-  - cookieAuth
-  - basicAuth
+### Recipe Endpoints
+
+#### List Ingredients [/api/recipe/ingredients/]
+
+Manage ingredients in the database.
+
++ Parameters
+    + assigned_only (integer, optional) - Filter by items assigned to recipes.
+
++ Response 200 (application/json)
+
+    [Array of Ingredient objects]
+
+#### Update Ingredient [/api/recipe/ingredients/{id}/]
+
+Manage ingredients in the database.
+
++ Parameters
+    + id (integer, required) - A unique integer value identifying this ingredient.
+
++ Request Body (application/json, application/x-www-form-urlencoded, multipart/form-data)
+    + Schema: IngredientRequest
+
++ Response 200 (application/json)
+
+    [Updated Ingredient object]
+
+#### Partially Update Ingredient [/api/recipe/ingredients/{id}/]
+
+Manage ingredients in the database.
+
++ Parameters
+    + id (integer, required) - A unique integer value identifying this ingredient.
+
++ Request Body (application/json, application/x-www-form-urlencoded, multipart/form-data)
+    + Schema: PatchedIngredientRequest
+
++ Response 200 (application/json)
+
+    [Updated Ingredient object]
+
+#### Delete Ingredient [/api/recipe/ingredients/{id}/]
+
+Manage ingredients in the database.
+
++ Parameters
+    + id (integer, required) - A unique integer value identifying this ingredient.
+
++ Response 204
+
+    [No response body]
+
+...
+
+### User Endpoints
+
+#### Create User [/api/user/create/]
+
+Create a new user in the system.
+
++ Request Body (application/json, application/x-www-form-urlencoded, multipart/form-data)
+    + Schema: UserRequest
+
++ Response 201 (application/json)
+
+    [Newly created User object]
+
+...
 
 ## Schemas
-- **AuthToken**:
-  - Type: object
-  - Description: Serializer for the user auth token.
-  - Properties:
-    - email (string, format: email, required)
-    - password (string, required)
-- **PatchedUser**:
-  - Type: object
-  - Description: Serializer for the user object.
-  - Properties:
-    - email (string, format: email, maxLength: 255)
-    - password (string, writeOnly: true, maxLength: 128, minLength: 5)
-    - name (string, maxLength: 255)
-- **User**:
-  - Type: object
-  - Description: Serializer for the user object.
-  - Properties:
-    - email (string, format: email, maxLength: 255, required)
-    - password (string, writeOnly: true, maxLength: 128, minLength: 5, required)
-    - name (string, maxLength: 255, required)
+
+### Components
+
+#### AuthToken
+
+Serializer for the user auth token.
+
++ Properties
+    + email (string, required)
+    + password (string, required)
+
+#### AuthTokenRequest
+
+Serializer for the user auth token.
+
++ Properties
+    + email (string, required)
+    + password (string, required)
+
+...
+
+## Security Schemes
+
+- Basic Authentication
+- Token Authentication
+- Cookie Authentication
